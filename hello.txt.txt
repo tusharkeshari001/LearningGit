@@ -1,2 +1,3 @@
 hello my name is tushar keshari.
 I am learning git.
+Git is awesome tool.
