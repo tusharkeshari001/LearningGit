@@ -1,0 +1,19 @@
+#anotherDiv div:nth-of-type(1) {
+    color: red;
+}
+
+#anotherDiv div:nth-of-type(2) {
+    color: green;
+}
+
+#anotherDiv div:nth-of-type(3) {
+    color: yellow;
+}
+
+#anotherDiv div:nth-of-type(4) {
+    color: grey;
+}
+
+#anotherDiv div:nth-of-type(5) {
+    color: blue;
+}
