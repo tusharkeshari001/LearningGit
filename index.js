@@ -14,7 +14,7 @@
 document.getElementById("root").innerHTML = chessBoard(8);
 
 function chessBoard(n) {
-  let chessBoardArray = new Array(n).fill(new Array(n).fill(new Object(1)));
+  // let chessBoardArray = new Array(n).fill(new Array(n).fill(new Object(1)));
   let boxString = "<div style='width: fit-content; border: 1px solid black'>";
   for (let i = 0; i < n; i++) {
     boxString += "<div style='width: fit-content; display: flex;'>";
