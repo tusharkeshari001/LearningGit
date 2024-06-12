@@ -1,5 +1,11 @@
+/*
+  default page function is homePage function
+*/
 document.getElementById("main-body").innerHTML = homePage();
 
+/*
+  all header function starts from here
+*/
 function homePage() {
   var games = [];
   let chess = {
@@ -25,6 +31,10 @@ function homePage() {
 function aboutUs() {}
 
 function contactUs() {}
+
+/*
+  headers tabs on click handelers
+*/
 
 document.getElementById("home").addEventListener("click", function () {
   document.getElementById("main-body").innerHTML = homePage();
