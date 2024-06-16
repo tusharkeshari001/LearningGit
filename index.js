@@ -1,39 +1,49 @@
-// document.addEventListener("DOMContentLoaded", function () {
-//   var scrollable = document.getElementById("scrollable");
+/*
+  default page function is homePage function
+*/
+document.getElementById("main-body").innerHTML = homePage();
 
-//   scrollable.addEventListener("wheel", function (e) {
-//     // Prevent default scrolling behavior on the body
-//     e.preventDefault();
-
-//     // Manually scroll the scrollable element
-//     scrollable.scrollTop += e.deltaY;
-//   });
-// });
-
-// matrix will always have x*x colums
-document.getElementById("root").innerHTML = chessBoard(8);
-
-function chessBoard(n) {
-  // let chessBoardArray = new Array(n).fill(new Array(n).fill(new Object(1)));
-  let boxString = "<div style='width: fit-content; border: 1px solid black'>";
-  for (let i = 0; i < n; i++) {
-    boxString += "<div style='width: fit-content; display: flex;'>";
-    for (let j = 0; j < n; j++) {
-      boxString += `<div id="box-${i + 1}${j + 1}" style='background: ${
-        i % 2 == 0
-          ? j % 2 == 0
-            ? "#1d9300"
-            : "#fff"
-          : j % 2 == 0
-          ? "#fff"
-          : "#1d9300"
-      }; 
-          display: flex; justify-content: center; align-items: center; height:100px; width:100px'>(${
-            i + 1
-          }, ${j + 1})</div>`;
-    }
-    boxString += "</div>";
+/*
+  all header function starts from here
+*/
+function homePage() {
+  var games = [];
+  let chess = {
+    id: "chess_1",
+    name: "Chess",
+    icon: "",
+    url: "./src/home/chessboard/chessboard.html",
+  };
+  games.push(chess);
+  let final_result = "<ul>";
+  let i = 0;
+  while (i < games.length) {
+    final_result += `<li id = "${games[i].id}"><a id="${i + 1}
+                      "href=${games[i].url}>${games[i].name}</a>
+                    </li>`;
+    i++;
   }
-  boxString += "</div>";
-  return boxString;
+  final_result += "</ul>";
+  console.log(final_result);
+  return final_result;
 }
+
+function aboutUs() {}
+
+function contactUs() {}
+
+/*
+  headers tabs on click handelers
+*/
+
+document.getElementById("home").addEventListener("click", function () {
+  document.getElementById("main-body").innerHTML = homePage();
+});
+
+document.getElementById("aboutus").addEventListener("click", function () {
+  document.getElementById("main-body").innerHTML = aboutUs();
+});
+
+document.getElementById("contact").addEventListener("click", function () {
+  document.getElementById("main-body").innerHTML = contactUs();
+});
