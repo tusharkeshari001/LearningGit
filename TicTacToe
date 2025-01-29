@@ -1,0 +1,396 @@
+Game
+-gameid: string
+-board: Board
+-players: List<Player>
+-moves: List<Move>
+-currentMove: Player
+-winner:Player
+
+Board
+-size: number
+-cells: List<List<Cell>>
+
+Cell
+-x:int
+-y:int
+-player: Player
+-cellstate: CellState
+
+Enum CellState
+ EMPTY, FILLED
+
+Player
+-pid: string
+-playerName: string;
+-playerType: PlayerType;
+-symbol: Symbol;
+
+Symbol
+-name: char;
+
+PlayerType
+BOT,HUMAN
+
+Move
+-player: Player
+-cell: Cell
+
+
+
+
+
+
+
+
+enum CellState{
+	EMPTY, FILLED
+}
+
+class Cell{
+	int x;
+	int y;
+	Player player;
+	CellState cellstate;
+	
+	public Cell(int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.cellState = CellState.EMPTY;
+	}
+}
+
+
+class Board{
+	int size;
+	List<List<Cell>> cells;
+	public Board(int numberOfPlayer) {
+		this.size = numberOfPlayer+1;
+		this.cells = new ArrayList<>();
+		for(int i=0; i<size; i++){
+			List<> row = new ArrayList<Cell>();
+			
+			for(int j = 0; j<size; j++){
+				Cell cell = new Cell(i, j);
+				row.add(cell);
+			}
+			
+			cells.add(row);
+		}
+	}
+	
+	public void printBoard() {
+		for(List<Cell> row: cells){
+			for(Cell cell: row){
+				if(cell.cellstate = CellState.EMPTY){
+					System.out.print(" |   | ")
+				} else if(cell.cellstate = CellState.FILLED){
+					System.out.print(" | "+cell.player.Symbol.name.toString()+ " |");
+				}
+				
+				System.out.println("");
+			}
+		}
+	}
+}
+
+class Move{
+	Cell cell;
+	Player player;
+	public Move(Cell cell) {
+		this.cell = cell;
+		this.player = cell.player;
+	}
+	
+}
+
+enum PlayerType{
+	HUMAN, BOT
+}
+
+class Symbol {
+	Char name;
+	public Symbol(Char name){
+		this.name = name;
+	}
+}
+
+class Player {
+	String pid;
+	String playerName;
+	PlayerType type;
+	Symbol symbol;
+	
+	public Player(String name, Symbol symbol) {
+		this.pid = uuid();
+		this.playerName = name;
+		this.symbol = symbol;
+	}
+	
+	public void makeMove(Board board){
+		Scanner sc = new Scanner(System.in);
+		while(true){
+			while(true){
+				System.out.print("Enter X = ");
+				int x = sc.nextInt();
+				if(!checkValidIndex(x)) continue;
+				break;
+			}
+			
+			while(true){
+				System.out.print("Enter Y = ");
+				int y = sc.nextInt();
+				if(!checkValidIndex(y)) continue;
+				break;			
+			}
+			Cell cell = board.cells.get(x).get(y);
+			if(cell.cellstate == CellState.EMPTY){
+				cell.player = this;
+				cell.cellState = CellState.FILLED;
+				return new Move(cell);
+			}
+			System.out.println("Cell is not EMPTY please select another cell");
+		}
+	}
+}
+
+class Human extends Player{
+	public Human(String name, Symbol symbol) {
+		super(name, symbol);
+		this.type = PlayerType.HUMAN;		
+	}
+}
+
+class Bot extends Player{
+	DifficultyLevel difficultyLevel;
+	
+	public Bot(String name, Symbol symbol, DifficultyLevel difficultyLevel) {
+		super(name, symbol);
+		this.difficultyLevel = difficultyLevel;
+		this.type = PlayerType.BOT;
+	}
+	
+	public void makeMove(){
+		
+	}
+}
+
+class PlayerFactory{
+	static getPlayer(int type, String name, Symbol symbol) {
+		if(type == 1) {
+			return new Human(name, symbol);
+		}else if(type == 2){
+			return new Bot(name, symbol); 
+		}
+	}
+}
+
+enum GameResult{
+	DRAW = "DRAW", ABORT = "ABORT", WON = "WON"
+}
+
+class Game{
+	String gameid;
+	Board board;
+	List<Player> players;
+	List<Move> moves;
+	List<WinningStrategy> winningSrategy;
+	int playerTurn;
+	Player winner;
+	GameResult result;
+	
+	public Game(Board board, List<Player> players, List<WinningStrategy> winningSrategy){
+		this.gameid = uuid();
+		this.board = board;
+		this.players = players;
+		this.winningSrategy = winningSrategy;
+		Random random = new Random();
+		this.playerTurn = random.nextInt(players.size());
+	}
+	
+	public void start(){
+		do {
+			if(playerTurn >= players.size()){
+				playerTurn = 0;			
+			}
+			
+			board.printBoard();
+			
+			Player currentPlayerTurn = players.get(playerTurn);
+			System.out.println(currentPlayerTurn.playerName + "/'s turn");
+			
+			Move playerMove = currentPlayerTurn.makeMove();
+			moves.add(playerMove);
+			
+			playerTurn++;
+		} while(isMatchInProgress())
+	}
+	
+	public boolean checkValidIndex(int index){
+		if(index>=0 && index<board.size){
+			return true;
+		}
+		System.out.println("Wrong Input, Try Again, Index should be between 0 to "+(board.size-1));
+		return false;
+	}
+	
+	public void displayWinner() {
+		if(result == GameResult.DRAW) {
+			System.out.println("Match Draw");
+		}else if(result == GameResult.ABORT){
+			System.out.println("Match ABORT from player");		
+		}else {
+			System.out.println("Congratulation "+ winner.name + " You win the match");		
+		}
+	}
+	
+	public boolean isMatchInProgress() {
+		for(WinningStrategy ws: winningSrategy) {
+			Move currentMove = moves.get(moves.length() - 1);
+			ws.setData(currentMove.getCell());
+			if(ws.checkWin()) return false;
+		}
+		return true;
+	}
+	
+}
+
+interface WinningStrategy{
+	public boolean checkWin();
+	public void setData(Cell cell);
+}
+
+class RowWinningStrategy implements WinningStrategy {
+	Map<Integer, Map<Symbol, Integer>> rowWinStrategy;
+	int size;
+	
+	public RowWinningStrategy(int size) {
+		this.rowWinStrategy = new HashMap();
+		this.size = size;
+	}
+	
+	public boolean checkWin() {
+		rowWinStrategy.values().stream().anyMatch(rowData -> (rowData.values().stream().anyMatch(symbolCount -> (symbolCount === size))));
+	}
+	
+	public void setData(Cell cell) {
+		if(rowWinStrategy.contain(cell.getX())) {
+			rowWinStrategy.set(cell.getX(), rowWinStrategy.get(cell.getX())+1);
+		}else {
+			Symbol s = cell.getPlayer().getSymbol();
+			Map<Symbol, Integer> symbolCount = new HashMap();
+			symbolCount.set(s, 0);
+			rowWinStrategy.set(cell.getX(), symbolCount);
+		}
+	}
+} 
+
+class ColumnWinningStrategy implements WinningStrategy {
+	private Map<Integer, Map<Symbol, Integer>> columnWinStrategy;
+	int size;
+	
+	public RowWinningStrategy(int size) {
+		this.columnWinStrategy = new HashMap();
+		this.size = size;
+	}
+	
+	public boolean checkWin() {
+		columnWinStrategy.values().stream().anyMatch(colData -> (colData.values().stream().anyMatch(symbolCount -> (symbolCount === size))));
+	}
+	
+	public void setData(Cell cell) {
+		if(columnWinStrategy.contain(cell.getY())) {
+			columnWinStrategy.set(cell.getY(), columnWinStrategy.get(cell.getY())+1);
+		}else {
+			Symbol s = cell.getPlayer().getSymbol();
+			Map<Symbol, Integer> symbolCount = new HashMap();
+			symbolCount.set(s, 0);
+			columnWinStrategy.set(cell.getY(), symbolCount);
+		}
+	}
+
+}
+
+class DiagonalWinningStrategy implements WinningStrategy {
+	Map<Integer, Map<Symbol, Integer>> diagonalWinStrategy;
+	
+	public RowWinningStrategy() {
+		this.diagonalWinStrategy = new HashMap();
+	}
+	
+	public boolean checkWin() {
+	
+	}
+	
+	public void setData(Cell cell) {
+		if(rowWinStrategy.contain(cell.getX())) {
+			rowWinStrategy.set(cell.getX(), rowWinStrategy.get(cell.getX())+1);
+		}else {
+			Symbol s = cell.getPlayer().getSymbol();
+			Map<Symbol, Integer> symbolCount = new HashMap();
+			symbolCount.set(s, 0);
+			rowWinStrategy.set(cell.getX(), symbolCount);
+		}
+	}
+
+}
+
+class Client {
+
+	public static void main(String []args){
+	
+		System.out.println("Enter number of player");
+		Scanner sc = new Scanner(System.in);
+		int numberOfPlayer = sc.nextInt();
+		
+		Board board = new Board(numberOfPlayer);
+		
+		List<Player> players = new ArrayList<Player>();
+		
+		for(int i=0; i<numberOfPlayer; i++){
+			Player player;
+			System.out.println("Enter "+(i+1)+" player");
+
+
+			System.out.println("Enter Player Name ");
+			String playerName = sc.nextLine();
+			System.out.println("Enter Symbol ");
+			String s = sc.nextLine();
+			Symbol symbol = new Symbol(s);
+			System.out.println("Select Player Type");
+			System.out.println("1. HUMAN");
+			System.out.println("2. BOT");
+
+			while(true){
+				int type = sc.nextInt();
+				if(type == 1 || type == 2){
+					player = PlayerFactory.getPlayer(type, playerName, symbol);
+					break;
+				}
+				System.out.println("Wrong Input Please Enter Again")
+			}
+
+			
+			players.add(player);
+
+		} 
+		
+		List<WinningStrategy> winningSrategy = Array.of(
+			new RowWinningStrategy(numberOfPlayer+1), new ColumnWinningStrategy(numberOfPlayer+1)
+		);
+		
+		Game game = new Game(board, players, winningStrategy);
+		game.start();
+		game.displayWinner();
+	}
+
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+### **Case Study: Online Library Management System**
+
+**Design an Online Library Management System** where users can browse, read, and borrow books. The system should handle book inventory, user management, and other functionalities.
+
+**Requirements**:
+1. **User Types**: Different user roles (Member, Librarian, Admin) with distinct permissions.
+2. **Book Categories**: Books categorized into genres; each genre has unique attributes. One book can have multiple genres.
+3. **Search Functionality**: Advanced search by title, author, genre, and publication date.
+4. **Reservation System**: Users can reserve books that are already borrowed.
+5. **Late Return Handling**: Automated fine calculation and notification for late returns.
+6. **Borrowing Limit**: Limits on the number of books and duration of borrowing per user type.
+7. **Digital Reading**: Support for reading books online in a digital format.
+8. **User Reviews and Ratings**: Users can rate and review books.
+9. **Recommendation Engine**: Suggest books based on user history and preferences.
+10. **Inventory Management**: Real-time tracking of books available, borrowed, or reserved.
+11. **Membership Management**: Handling new memberships, renewals, and cancellations.
+12. **Notification System**: Email and in-app notifications for reservations, due dates, etc.
+13. **Multi-Language Support**: The system must support multiple languages.
+14. **Reporting Tools**: Generate reports on most-read books, active users, etc.
+15. **Accessibility Features**: The system should be accessible to users with disabilities.
+
+---
+
+**Question**:
+_In schema design, to ensure efficient querying of 'Books' by 'Genre,' which approach is best?_
+
+
+
+---------------------------------class diagram------------------------------------------------
+enum UserRole{
+	Member, Librarian, Admin
+}
+
+class User {
+	-name
+	-userrole
+	-permission
+}
+
+class Admin extends user {
+	
+}
+
+class Librarian extends user {
+	
+}
+
+class Member extends user {
+	
+}
+
+class Genre {
+
+}
+
+class Books {
+	-title
+	-author
+	-genres: List<Genre>
+	
+}
+
+

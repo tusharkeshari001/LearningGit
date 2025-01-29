@@ -1,0 +1,118 @@
+enum RoleType{
+	ADMIN = "ADMIN", HUMAN_RESOURCE = "HUMAN RESOURCE", MANAGER = "MANAGER", SELLER = "SELLER", 
+	CUSTOMER = "CUSTOMER"
+}
+---------------------------------------------------------------------------------------------------
+class UserRole {
+	-roleid: string;
+	-roleName: RoleType; // enum
+}
+
+class User{
+	-uid: string;
+	-uname: string;
+	-phone: string;
+	-email: string;
+	-password: string;
+	-isActive: boolean;
+	-role: UserRole;
+	-doj: Date;
+	-bdid: string;
+	-cartid: string;
+}
+
+class BankDetail {
+	-bdid: string;
+	-bankname: string;
+	-branch: string;
+	-accountnumber: string;
+	-ifsc: string;
+}
+
+--------Products-------------------------------------------------------------------------------------
+class BaseModel{
+	-id: string;
+	-createdAt: Date;
+	-updatedAt: Date;
+	-isDeleted: boolean;
+}
+
+class Category extends BaseModel {
+	-title: string;
+	-description: string;
+	
+	-products: List<Product>;
+}
+
+class Product extends BaseModel {
+	-title: string;
+	-description: string;
+	-category: Category;
+	-image: string;
+	-price: double;
+	
+}
+
+-------Cart------------------------------------------------------------------------------------------
+class Cart{
+	-cartid: string;
+	-totalAmmount: double;
+}
+
+class CartItem {
+	-itemid:string;
+	-cartid: string;
+	-pid: string;
+	-quantity: int;
+}
+
+-------Order-----------------------------------------------------------------------------------------
+class Order {
+	-orderid: string;
+	-uid_as_sid: string;
+	-orderdate: Date;
+	-totalAmmount: double;
+}
+
+class OrderItem {
+	-oi_id:string;
+	-orderid: string;
+	-pid: string;
+	-quantity: string;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

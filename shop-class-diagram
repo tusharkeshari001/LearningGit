@@ -1,0 +1,147 @@
+// it must be constant type with fixed value not enum
+enum UserType{
+	ADMIN, HUMAN_RESOURCE, MANAGER, SELLER, CUSTOMER
+}
+
+interface Registration {
+---------------------------------
+	+register();
+}
+
+interface Login {
+---------------------------------
+	+login();
+}
+
+interface CreateUser {
+---------------------------------
+	+addUser();
+}
+
+interface ViewUser {
+---------------------------------
+	+viewUser();
+}
+
+interface EditUser {
+---------------------------------
+	+editUser();
+}
+
+interface DeleteUser {
+
+---------------------------------
+	+removeUser();
+}
+
+interface DeactivateUser {
+---------------------------------
+	+deactivateUser();
+	+deactivatedBy();
+}
+
+interface RoleManagement {
+---------------------------------
+	+addRole();
+	+changeRole();
+}
+
+
+class User{
+	-uid: long;
+	-uname: string;
+	-phone: string;
+	-email: string;
+	-status: boolean;
+	-role: UserType;
+---------------------------------
+	
+}
+
+
+class InternalUser extends User implements Login {
+	-password: string;
+	-doj: Date;
+	-attendId: long;
+	-managerid: long;
+---------------------------------
+	-changePassword();
+}
+
+// it must be constant type with fixed value not enum
+enum AttendanceStatus {
+	PRESENT, LEAVE, HALF_DAY_LEAVE
+}
+
+class Time {
+	-hour: String;
+	-minute: String;
+	-Second: String;
+}
+
+class Attendance {
+	-attendId: long;
+	-status: AttendanceStatus;
+	-date: Date;
+	-entry-time: Time
+	-exit-time: Time
+}
+
+
+class ExternalUser extends User {
+	-createdBy: long; //seller-id
+}
+
+class Admin extends InternalUser implements Registration, CreateUser, ViewUser, EditUser, DeleteUser, DeactivateUser, RoleManagement {
+
+---------------------------------
+	
+}
+
+class HumanResource extends InternalUser implements CreateUser , ViewUser, EditUser, DeactivateUser, RoleManagement {
+	
+--------------------------------
+	
+}
+
+class Manager extends InternalUser {
+	
+}
+
+class Seller extends InternalUser {
+	-shistoryid: long;
+}
+
+class SellerHistory {
+	-shistoryid: long;
+	-orderid: long;
+}
+
+class Customer extends ExternalUser {
+	-chistoryid: long;
+}
+
+class CustomerHistory {
+	-chistoryid: long;
+	-orderid: long;
+}
+
+class Order {
+	-orderid: long;
+	-cid: long;
+	-cartid: long;
+}
+
+class Cart {
+	-cartid: long;
+	-orderid: long;
+	-pid: long;
+	-quantity: long;
+	-orderDate: Date;
+}
+
+class Product {
+	-pid: long;
+	-pname: String;
+	-category: Category;
+}

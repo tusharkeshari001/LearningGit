@@ -1,0 +1,155 @@
+User Registration: Register driver and riders.
+Profile Management: Manage profiles for drivers and riders.
+Vehicle Management: Add/Edit vehicle details (for drivers).
+Ride Booking: Riders can book a ride.
+Ride Matching: System matches a rider with nearby driver.
+Fare Calculation: Calculate fare based on distance and time.
+Payment Processing: Process payments and manage billing.
+Ride History: View past rides for both riders and drivers.
+Rating and Reviews: Option to rate and review a ride.
+Driver Availability Toggle: Drivers can toggle their availability.
+Location Tracking: Real-time location tracking of the vehicle.
+Emergency Services: Quick access to emergency services.
+Support Service: Customer support for riders and drivers.
+Ride Cancellation: Option to cancel a ride with penalties/rules.
+Driver Earning: View and manage driver earnings.
+
+
+
+
+
+----------------------------------------------------------------------------
+
+enum UserType{
+	DRIVER, RIDER
+}
+
+
+class User{
+	-uid: long;
+	-uname: string;
+	-email: string;
+	-password: string;
+	-phone: long;
+	-utype: UserType;
+----------------------------------------
+	+register();
+	+login();
+	+manageProfile();
+	+viewRideHistory();
+	+rateRide();
+	+requestSupport();
+	
+}
+
+class Rider extends User{
+
+----------------------------------------
+	
+}
+
+class Driver extends User{
+	-vehicle: Vehicle;
+	-availability: Boolean;
+	-earning: Double;
+----------------------------------------
+	+toggleAvailability();
+	+ViewEarning();
+	+addVehicle();
+	+editVehicle();
+}
+
+class Vehicle{
+	-vno: String;
+	-model: String;
+	-licensePlateNo: String;
+	-driverId: long;
+----------------------------------------
+	+addDetails();
+	+editDetails();
+}
+
+
+class Location {
+	-latitude: Double;
+	-longitude: Double;
+	-driverId: long;
+----------------------------------------
+	+trackLocation();
+}
+
+class Ride{
+	-rid: long;
+	-riderId: long;
+	-driverId: long;
+	-from: string;
+	-to: string;
+	-distance: double;
+	-time: double;
+	-fare: double; 
+----------------------------------------
+	+bookRide();
+	+cancelRide();
+	+calculateFare();
+}
+
+
+enum PaymentStatus {
+	PENDING, COMPLETED
+}
+
+class PaymentService{
+	-pid:long;
+	-rid: long;
+	-amount: Double;
+	-status: PaymentStatus
+---------------------------------------
+	+manageBilling();
+}
+
+class EmergencyService {
+	-serviceId: long;
+	-description: string;
+---------------------------------------
+	+accessService();
+}
+
+class SupportService{
+	-supportId: long;
+	-issue: string;
+	-userid: long;
+----------------------------------------
+	+requestSupport();
+}
+
+
+Explanation of Classes
+User: The base class for both drivers and riders, managing user details and common functionalities.
+
+Driver: Inherits from User. Includes vehicle management, availability toggling, and earnings viewing.
+
+Rider: Inherits from User. Handles ride booking and ride history viewing.
+
+Vehicle: Manages vehicle details related to drivers.
+
+Ride: Represents a ride, capturing details like distance, fare, and status. It has methods for booking and canceling rides, as well as fare calculation.
+
+Payment: Manages payment processing and billing for rides.
+
+Location: Handles real-time location tracking for drivers.
+
+EmergencyService: Provides quick access to emergency services.
+
+SupportService: Manages customer support requests for users.
+
+Relationships
+User class is the superclass for Driver and Rider.
+Driver has a one-to-many relationship with Vehicle.
+Rider can have multiple Ride instances associated with them.
+Each Ride is associated with one Driver and one Rider.
+Payment is linked to Ride for processing transactions.
+This class diagram captures the main entities and their relationships within the system based on your requirements. Let me know if you need further details or modifications!
+
+
+
+
