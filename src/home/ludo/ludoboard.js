@@ -1,0 +1,1 @@
+document.getElementById('ludoboard').innerHTML = "Hello chai pee lo";
